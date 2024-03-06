@@ -2,59 +2,88 @@
 """
 Created on Mon Mar  4 17:15:57 2024
 
-@author: ASARE
+@author: Boateng Kwabena Henry
 """
 
 import numpy as np
 
+
 # =============================================================================
-# a  = np.array([[25,5,1],[64,8,1],[144,12,1]])
+# def guassianElimination(numberRow, numberColumn,a=[]):
+#     if numberColumn != numberRow:
+#         raise ValueError ("The Number of rows must be equal to the number of Columns")
+#     alpha = np.zeros((numberRow,numberColumn))
+#     beta = np.zeros((numberRow,numberColumn))
+#     b = np.array(a)
+#     print (b)
+#     i = 0
+#     while i <numberRow-1:
+#         #Finding the pivot element
+#         pivot = b[i:, i]
+#         pivot_index = np.argmax(np.abs(pivot))
+#         pivot_index += i
+#         print(pivot)
+#         print(pivot_index)
+#         
+#         #Swapping rows to reduce Round-off error and Division by Zero errors
+#         if  pivot_index != i:
+#             b[[i, pivot_index]] = b[[pivot_index, i]]
+#             alpha[[i, pivot_index]] = alpha[[pivot_index, i]]
+#         
+#         #performing Elimination
+#         for j in range(0, numberColumn):
+#             if (j < numberColumn-i-1 ):
+#                 division = b[j][i] / b[i][i]
+#                 beta[i] =( b[i] - division ) * b[j]
+#                 print(beta)
+#                 # alpha[j][i:] = a[j][i:] - division * a[i][i:]
+#         b = beta  
+#         i += 1
+#     print (beta)
 # 
-# # b = (a[2][0]/a[0][0]) *a[0]
+# guassianElimination(3,3, [[25,5,1],[64,8,1],[144,12,1]])
 # 
-# e = np.zeros((3,3))
-# c = np.zeros((3,3))
-# d = np.zeros((3,3))
-# print("First Step in Gaussian Elimination")
-# for i in range(0,3):
-#     if (i < 2):
-#         b = (a[i+1][0]/a[0][0]) *a[0]
-#         e[i+1] = b
-#     c[i] = a[i] - e[i]
-# print(c)
-# print("Second Step in Gaussian Elimination ")
-# for i in range (1,3):
-#     if (i < 2):
-#         f = (c[i+1][1]/c[1][1]) *c[1]
-#         d[i+1] = f
-#     c[i] = c[i] - d[i]
-# print(c)
-# # print (a.shape[0])
 # =============================================================================
 
-def guassianElimination(numberRow, numberColumn,a=[]):
-    assert numberRow == numberColumn
-    alpha = np.zeros((numberRow,numberColumn))
-    beta = np.zeros((numberRow,numberColumn))
-    b = np.array(a)
-    print (b)
-    j = 0
-    while j <numberRow-1:
-        for i in range(0, numberColumn):
-            if (i < numberColumn-j-1 ):
-                elimination = (b[i+j+1][j]/b[j][j] * b[j])
-                alpha[i+1] = elimination
-            beta[i] = b[i] - alpha[i]
-       # b = beta  
-        j += 1
-    print (beta)
-# =============================================================================
-#     for i in range (1, numberColumn):
-#         if (i < numberColumn-1):
-#             elimination = (beta[i+1][1]/beta[1][1] * beta[1])
-#             alpha[i+1] = elimination
-#         beta[i] = beta[i] - alpha[i]
-#             
-#     
-# =============================================================================
-guassianElimination(3,3, [[25,5,1],[64,8,1],[144,12,1]])
+
+def guassianElimination(a_matrix, b_matrix):
+    a = np.array(a_matrix)
+    b = np.array(b_matrix)
+    
+    if a.shape[0] != a.shape[1]:
+        print("Error: The row is not equal to the column")
+        return
+    if b.shape[1] > 1 or b.shape[0] != a.shape[0]:
+        print("Error: Constant Vector is incorrectly sized")
+        return
+    
+    n = len(b_matrix)
+    m = n-1
+    i = 0
+    x = np.zeros(n)
+    new_line = "\n"
+
+    augmented_matrix = np.concatenate((a_matrix,b_matrix), axis = 1 , dtype= float)
+    
+  
+    while i < n:
+        #Partial Pivoting
+        for p in range(i+1 , n):
+            if  abs(augmented_matrix[i,1] < abs(augmented_matrix[p,i])):
+                augmented_matrix[[p, i]]  = augmented_matrix[[i,p]]
+                
+        if augmented_matrix[i,i] == 0.0:
+            print("Error: Divide by Zero error")
+            return
+        
+        for j in range(i+1, n):
+            scalar = augmented_matrix[j][i] / augmented_matrix[i][i]
+            augmented_matrix[j] = augmented_matrix[j] -(scalar* augmented_matrix[i])
+            print (augmented_matrix)
+
+vari = np.array([[2,3],
+                 [4,5]]
+                 )
+cons = np.array([[9],
+                 [12]])
+guassianElimination(vari,cons )
